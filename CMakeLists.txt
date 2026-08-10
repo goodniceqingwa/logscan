@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(logscan LANGUAGES CXX)
 
 # 构建开关：测试需要显式开启，默认只构建库和开发工具。
-option(LOGSCAN_BUILD_TESTS "Build compile-only API tests" OFF)
+option(LOGSCAN_BUILD_TESTS "Build compile-only API tests" ON)
 option(LOGSCAN_BUILD_BENCHMARKS "Build benchmark entry points" ON)
 option(LOGSCAN_BUILD_TOOLS "Build developer tools" ON)
 
@@ -10,6 +10,13 @@ option(LOGSCAN_BUILD_TOOLS "Build developer tools" ON)
 add_library(logscan STATIC
     src/LogScanner.cpp
     src/ParallelExecutor.cpp
+    include/logscan/LogAnalyzer.h
+    include/logscan/LogParser.h
+    include/logscan/LogReportSink.h
+    include/logscan/LogScanner.h
+    include/logscan/LogScannerConfig.h
+    include/logscan/LogSource.h
+    include/logscan/LogTypes.h
 )
 
 target_compile_features(logscan PUBLIC cxx_std_17)

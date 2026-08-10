@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <utility>
 #include <cassert>
+#include <iostream>
 
 // 这些断言确保四个扩展点保持抽象接口，避免框架意外提供默认业务实现。
 static_assert(std::is_abstract<logscan::LogSource>::value,
@@ -16,7 +17,7 @@ static_assert(std::is_abstract<logscan::LogSource>::value,
 static_assert(std::is_abstract<logscan::LogParser>::value,
               "LogParser is an extension point");
 static_assert(std::is_abstract<logscan::LogAnalyzer>::value,
-              "LogAnalyzer is an extension point");
+              "LogAnalyzer is an extension point");         
 static_assert(std::is_abstract<logscan::LogReportSink>::value,
               "LogReportSink is an extension point");
 
@@ -29,11 +30,25 @@ int main() {
     logscan::RawLogBatch raw_batch;
     logscan::LogBatch parsed_batch;
     logscan::BatchReport batch_report;
+    request.inputs.emplace_back("dummy.log");
 
     const auto result = scanner.scan(request);
 
-    assert(result.status == logscan::ScanStatus::Failed);
-    assert(!result.error.empty());
+    
+
+    if (result.status == logscan::ScanStatus::Failed)
+    {
+        std::cerr << "expected ScanStatus::Failed, but got"
+                  << static_cast<int>(result.status) << std::endl;
+        return 1;
+    }
+
+    if (result.error.empty())
+    {
+        std::cerr << "expected a non-empty error message\n";
+        return 2;
+    }
+
     scanner.cancel();
 
     (void)config;
