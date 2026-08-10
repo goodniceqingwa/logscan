@@ -1,6 +1,5 @@
+// 并行执行器的预留实现文件。
+// 未来可在这里放置 worker 生命周期、有限容量队列、背压和关闭协议。
 namespace logscan::detail {
-
-// Placeholder translation unit for the future worker pool and bounded queue.
-// No scheduling or synchronization behavior is provided by the scaffold.
 
 }  // namespace logscan::detail
