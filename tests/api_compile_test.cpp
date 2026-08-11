@@ -36,7 +36,7 @@ int main() {
 
     
 
-    if (result.status == logscan::ScanStatus::Failed)
+    if (result.status != logscan::ScanStatus::Failed)
     {
         std::cerr << "expected ScanStatus::Failed, but got"
                   << static_cast<int>(result.status) << std::endl;

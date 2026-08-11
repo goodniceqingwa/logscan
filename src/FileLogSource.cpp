@@ -1,4 +1,4 @@
-#include "../include/logscan/FileLogSource.h"
+#include "logscan/FileLogSource.h"
 
 namespace logscan{
 

@@ -1,10 +1,40 @@
-# 该测试是 API smoke test，不依赖具体日志格式或并发实现。
 add_executable(logscan_api_test
     api_compile_test.cpp
 )
 
-# 链接框架目标，确保公共头文件和目标声明可正常使用。
-target_link_libraries(logscan_api_test PRIVATE logscan)
-target_compile_features(logscan_api_test PRIVATE cxx_std_17)
+target_link_libraries(logscan_api_test
+    PRIVATE
+        logscan
+)
 
-add_test(NAME logscan_api_test COMMAND logscan_api_test)
+target_compile_features(logscan_api_test
+    PRIVATE
+        cxx_std_17
+)
+
+add_test(
+    NAME logscan_api_test
+    COMMAND logscan_api_test
+)
+
+
+add_executable(file_log_source_test
+    file_log_source_test.cpp
+)
+
+target_link_libraries(file_log_source_test
+    PRIVATE
+        logscan
+)
+
+target_compile_features(file_log_source_test
+    PRIVATE
+        cxx_std_17
+)
+
+add_test(
+    NAME file_log_source_test
+    COMMAND
+        file_log_source_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/fixtures/basic.log"
+)
