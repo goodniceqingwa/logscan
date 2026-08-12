@@ -23,27 +23,6 @@ struct ScannerComponents {
     std::unique_ptr<LogReportSink> report_sink; // collector 侧的结果接收器。
 };
 
-// 扫描器内部实现的接口占位。
-// 这里保留生命周期、扫描和取消入口，具体并发编排由后续实现补齐。
-class Impl {
-public:
-    Impl(LogScannerConfig config, ScannerComponents components);
-    ~Impl();
-
-    Impl(const Impl&) = delete;
-    Impl& operator=(const Impl&) = delete;
-    Impl(Impl&&) noexcept;
-    Impl& operator=(Impl&&) noexcept;
-
-    ScanResult scan(const ScanRequest& request);
-    void cancel() noexcept;
-
-private:
-    LogScannerConfig config_;
-    ScannerComponents components_;
-    std::atomic_bool cancel_requested_{false};
-};
-
 class LogScanner {
 public:
     LogScanner(LogScannerConfig config, ScannerComponents components);
@@ -62,6 +41,7 @@ public:
     void cancel() noexcept;
 
 private:
+    class Impl;
     std::unique_ptr<Impl> impl_;  // 隐藏线程池、队列等实现细节。
 };
 

@@ -2,22 +2,43 @@
 
 namespace logscan {
 
-Impl::Impl(LogScannerConfig config, ScannerComponents components)
+// 扫描器内部实现的接口占位。
+// 这里保留生命周期、扫描和取消入口，具体并发编排由后续实现补齐。
+class LogScanner::Impl {
+public:
+    Impl(LogScannerConfig config, ScannerComponents components);
+    ~Impl();
+
+    Impl(const Impl&) = delete;
+    Impl& operator=(const Impl&) = delete;
+    Impl(Impl&&) noexcept;
+    Impl& operator=(Impl&&) noexcept;
+
+    ScanResult scan(const ScanRequest& request);
+    void cancel() noexcept;
+
+private:
+    LogScannerConfig config_;
+    ScannerComponents components_;
+    std::atomic_bool cancel_requested_{false};
+};
+
+LogScanner::Impl::Impl(LogScannerConfig config, ScannerComponents components)
     : config_(std::move(config)),
       components_(std::move(components))
 {
 }
 
-Impl::~Impl() = default;
+LogScanner::Impl::~Impl() = default;
 
-Impl::Impl(Impl&& other) noexcept
+LogScanner::Impl::Impl(Impl&& other) noexcept
     : config_(std::move(other.config_)),
       components_(std::move(other.components_)),
       cancel_requested_(other.cancel_requested_.load(std::memory_order_relaxed))
 {
 }
 
-Impl& Impl::operator=(Impl&& other) noexcept
+LogScanner::Impl& LogScanner::Impl::operator=(Impl&& other) noexcept
 {
     if (this != &other) {
         config_ = std::move(other.config_);
@@ -29,7 +50,7 @@ Impl& Impl::operator=(Impl&& other) noexcept
     return *this;
 }
 
-ScanResult Impl::scan(const ScanRequest& request)
+ScanResult LogScanner::Impl::scan(const ScanRequest& request)
 {
     if (cancel_requested_.load(std::memory_order_relaxed)) {
         return ScanResult{
@@ -76,7 +97,7 @@ ScanResult Impl::scan(const ScanRequest& request)
         "LogScanner: the scan pipeline is not implemented yet."};
 }
 
-void Impl::cancel() noexcept
+void LogScanner::Impl::cancel() noexcept
 {
     cancel_requested_.store(true, std::memory_order_relaxed);
 }

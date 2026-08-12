@@ -134,6 +134,8 @@ void FileLogSource::close() noexcept
         stream_.close();
     }
 
+    stream_.clear();
+
     current_path_.clear();
     next_batch_id_ = 0;
     next_record_id_ = 0;
