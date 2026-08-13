@@ -1,5 +1,9 @@
 #include "logscan/FileLogSource.h"
 
+#include <stdexcept>
+#include <system_error>
+#include <utility>
+
 namespace logscan{
 
 FileLogSource::FileLogSource(std::size_t batch_size)

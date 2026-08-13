@@ -55,11 +55,19 @@ struct LogRecord {
     std::string raw_text;  // 可选：保留原始文本，便于诊断和回溯。
 };
 
+struct ParseIssue {
+    RecordId record_id{0};
+    SourcePosition position;
+    std::string raw_text;
+    std::string error;
+};
+
 // 解析后的批次。worker_id 用于定位产生结果的工作线程，不代表线程 ID。
 struct LogBatch {
     BatchId id{0};
     std::size_t worker_id{0};
     std::vector<LogRecord> records;
+    std::vector<ParseIssue> parse_issues;
 };
 
 // 分析规则对单条日志产生的结果。
@@ -111,5 +119,6 @@ struct ScanResult {
 struct ScanRequest {
     std::vector<std::filesystem::path> inputs;
 };
+
 
 }  // namespace logscan

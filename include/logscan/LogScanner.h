@@ -8,8 +8,6 @@
 #include "logscan/LogTypes.h"
 
 #include <memory>
-#include <atomic>
-#include <utility>
 
 namespace logscan {
 

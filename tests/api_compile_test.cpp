@@ -15,7 +15,7 @@
 static_assert(std::is_abstract<logscan::LogSource>::value,
               "LogSource is an extension point");
 static_assert(std::is_abstract<logscan::LogParser>::value,
-              "LogParser is an extension point");
+              "LogParser is an extension po                                                                                                                                 int");
 static_assert(std::is_abstract<logscan::LogAnalyzer>::value,
               "LogAnalyzer is an extension point");         
 static_assert(std::is_abstract<logscan::LogReportSink>::value,

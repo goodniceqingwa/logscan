@@ -1,5 +1,8 @@
 #include "logscan/LogScanner.h"
 
+#include <atomic>
+#include <utility>
+
 namespace logscan {
 
 // 扫描器内部实现的接口占位。

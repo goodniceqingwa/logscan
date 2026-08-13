@@ -19,6 +19,8 @@ add_library(logscan STATIC
     include/logscan/LogTypes.h
     include/logscan/FileLogSource.h
     src/FileLogSource.cpp
+    include/logscan/FixedFormatLogParser.h
+    src/FixedFormatLogParser.cpp
 )
 
 target_compile_features(logscan PUBLIC cxx_std_17)
@@ -44,6 +46,10 @@ endif()
 if(LOGSCAN_BUILD_TOOLS)
     # 日志生成器是开发辅助工具，不属于核心库 API。
     add_executable(log_generator tools/log_generator.cpp
+
+
+
+
 
     )
     target_link_libraries(log_generator PRIVATE logscan)

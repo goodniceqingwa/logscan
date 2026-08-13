@@ -38,3 +38,22 @@ add_test(
         file_log_source_test
         "${CMAKE_CURRENT_SOURCE_DIR}/fixtures/basic.log"
 )
+
+add_executable(fixed_format_log_parser_test
+    fixed_format_log_parser_test.cpp
+)
+
+target_link_libraries(fixed_format_log_parser_test
+    PRIVATE
+        logscan
+)
+
+target_compile_features(fixed_format_log_parser_test
+    PRIVATE
+        cxx_std_17
+)
+
+add_test(
+    NAME fixed_format_log_parser_test
+    COMMAND fixed_format_log_parser_test
+)
