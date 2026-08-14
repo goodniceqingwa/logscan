@@ -14,8 +14,6 @@ public:
 
     Impl(const Impl&) = delete;
     Impl& operator=(const Impl&) = delete;
-    Impl(Impl&&) noexcept;
-    Impl& operator=(Impl&&) noexcept;
 
     ScanResult scan(const ScanRequest& request);
     void cancel() noexcept;
@@ -33,25 +31,6 @@ LogScanner::Impl::Impl(LogScannerConfig config, ScannerComponents components)
 }
 
 LogScanner::Impl::~Impl() = default;
-
-LogScanner::Impl::Impl(Impl&& other) noexcept
-    : config_(std::move(other.config_)),
-      components_(std::move(other.components_)),
-      cancel_requested_(other.cancel_requested_.load(std::memory_order_relaxed))
-{
-}
-
-LogScanner::Impl& LogScanner::Impl::operator=(Impl&& other) noexcept
-{
-    if (this != &other) {
-        config_ = std::move(other.config_);
-        components_ = std::move(other.components_);
-        cancel_requested_.store(
-            other.cancel_requested_.load(std::memory_order_relaxed),
-            std::memory_order_relaxed);
-    }
-    return *this;
-}
 
 ScanResult LogScanner::Impl::scan(const ScanRequest& request)
 {

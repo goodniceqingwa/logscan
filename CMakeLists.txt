@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(logscan LANGUAGES CXX)
 
 # 构建开关：测试需要显式开启，默认只构建库和开发工具。
-option(LOGSCAN_BUILD_TESTS "Build compile-only API tests" ON)
+option(LOGSCAN_BUILD_TESTS "Build logscan tests" ON)
 option(LOGSCAN_BUILD_BENCHMARKS "Build benchmark entry points" ON)
 option(LOGSCAN_BUILD_TOOLS "Build developer tools" ON)
 
@@ -33,7 +33,6 @@ target_include_directories(logscan
 )
 
 if(LOGSCAN_BUILD_TESTS)
-    # 测试只验证接口契约，不验证尚未实现的扫描行为。
     enable_testing()
     add_subdirectory(tests)
 endif()
@@ -45,13 +44,7 @@ endif()
 
 if(LOGSCAN_BUILD_TOOLS)
     # 日志生成器是开发辅助工具，不属于核心库 API。
-    add_executable(log_generator tools/log_generator.cpp
-
-
-
-
-
-    )
+    add_executable(log_generator tools/log_generator.cpp)
     target_link_libraries(log_generator PRIVATE logscan)
     target_compile_features(log_generator PRIVATE cxx_std_17)
 endif()
