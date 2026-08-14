@@ -82,11 +82,12 @@ bool FixedFormatLogParser::parse_line(const RawLogLine& input, LogRecord& output
         return false;
     }
 
-    std::tm parse_time{};
-    parse_time.tm_isdst = -1;
+    // 传统时间结构
+    std::tm parse_time{}; // 初始化
+    parse_time.tm_isdst = -1; // 常见时令写法
 
-    std::istringstream timestamp_stream(timestamp_text);
-    timestamp_stream >> std::get_time(&parse_time, "%Y-%m-%d %H:%M:%S");
+    std::istringstream timestamp_stream(timestamp_text); // 包装为输入流  ～= cin
+    timestamp_stream >> std::get_time(&parse_time, "%Y-%m-%d %H:%M:%S"); // 将字符串转变为固定格式
 
     if (timestamp_stream.fail())
     {
@@ -94,7 +95,24 @@ bool FixedFormatLogParser::parse_line(const RawLogLine& input, LogRecord& output
         return false;
     }
 
-    const std::time_t timestamp = std::mktime(&parse_time);
+    const int year = parse_time.tm_year + 1900;
+    const int month = parse_time.tm_mon + 1;
+    const int day = parse_time.tm_mday;
+    const int hour = parse_time.tm_hour;
+    const int minute = parse_time.tm_min;
+    const int second = parse_time.tm_sec;
+
+    if (month < 1 || month > 12 ||
+        day < 1 ||
+        day > days_in_month(year, month) ||
+        hour < 0 || hour > 23 ||
+        minute < 0 || minute > 59 ||
+        second < 0 || second > 59) {
+        error = "invalid timestamp: " + timestamp_text;
+        return false;
+    }
+
+    const std::time_t timestamp = std::mktime(&parse_time); // mktime 将结构体传转换为time_t 失败返回-1
 
     if (timestamp == static_cast<std::time_t>(-1))
     {
@@ -105,7 +123,7 @@ bool FixedFormatLogParser::parse_line(const RawLogLine& input, LogRecord& output
     output = LogRecord{};
     output.id = input.id;
     output.position = input.position;
-    output.timestamp = std::chrono::system_clock::from_time_t(timestamp);
+    output.timestamp = std::chrono::system_clock::from_time_t(timestamp); // 时间比较 排序 时间差计算
     output.severity = severity;
     output.message = message;
     output.raw_text = input.text;
@@ -145,6 +163,29 @@ bool FixedFormatLogParser::parse_severity(const std::string& text, Severity& out
     }
 
     return true;
+}
+
+bool FixedFormatLogParser::is_leap_year(int year)
+{
+    return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
+}
+
+int FixedFormatLogParser::days_in_month(int year, int month)
+{
+    static constexpr int days[] = {
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31
+    };
+
+    if (month < 1 || month > 12) {
+        return 0;
+    }
+
+    if (month == 2 && is_leap_year(year)) {
+        return 29;
+    }
+
+    return days[month - 1];
 }
 
 

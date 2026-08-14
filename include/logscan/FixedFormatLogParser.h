@@ -19,6 +19,10 @@ private:
 
     static bool parse_severity(const std::string& text, Severity& output);
 
+    static bool is_leap_year(int year);
+
+    static int days_in_month(int year, int month);
+
 };
 
 }
