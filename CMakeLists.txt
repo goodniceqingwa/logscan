@@ -21,6 +21,8 @@ add_library(logscan STATIC
     src/FileLogSource.cpp
     include/logscan/FixedFormatLogParser.h
     src/FixedFormatLogParser.cpp
+    include/logscan/FilterAnalyzer.h
+    src/FilterAnalyzer.cpp
 )
 
 target_compile_features(logscan PUBLIC cxx_std_17)

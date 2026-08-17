@@ -57,3 +57,22 @@ add_test(
     NAME fixed_format_log_parser_test
     COMMAND fixed_format_log_parser_test
 )
+
+add_executable(filter_analyzer_test
+    filter_analyzer_test.cpp
+)
+
+target_link_libraries(filter_analyzer_test
+    PRIVATE
+        logscan
+)
+
+target_compile_features(filter_analyzer_test
+    PRIVATE
+        cxx_std_17
+)
+
+add_test(
+    NAME filter_analyzer_test
+    COMMAND filter_analyzer_test
+)
