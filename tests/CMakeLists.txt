@@ -17,7 +17,6 @@ add_test(
     COMMAND logscan_api_test
 )
 
-
 add_executable(file_log_source_test
     file_log_source_test.cpp
 )
@@ -56,4 +55,23 @@ target_compile_features(fixed_format_log_parser_test
 add_test(
     NAME fixed_format_log_parser_test
     COMMAND fixed_format_log_parser_test
+)
+
+add_executable(filter_analyzer_test
+    filter_analyzer_test.cpp
+)
+
+target_link_libraries(filter_analyzer_test
+    PRIVATE
+        logscan
+)
+
+target_compile_features(filter_analyzer_test
+    PRIVATE
+        cxx_std_17
+)
+
+add_test(
+    NAME filter_analyzer_test
+    COMMAND filter_analyzer_test
 )
