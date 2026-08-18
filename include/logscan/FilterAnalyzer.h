@@ -3,8 +3,8 @@
 
 #include "logscan/LogAnalyzer.h"
 
-#include <optional>
 #include <memory>
+#include <optional>
 #include <string>
 
 namespace logscan {
@@ -18,7 +18,7 @@ struct FilterCriteria
 class FilterAnalyzer final : public LogAnalyzer
 {
 public:
-    FilterAnalyzer(FilterCriteria criteria);
+    explicit FilterAnalyzer(FilterCriteria criteria);
 
     std::unique_ptr<LogAnalyzer> clone() const override;
 
@@ -30,6 +30,6 @@ private:
     bool matches(const LogRecord& record) const;
 };
 
-}
+}  // namespace logscan
 
-#endif // FILTERANALYZER_H
+#endif  // FILTERANALYZER_H
