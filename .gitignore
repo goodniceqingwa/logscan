@@ -36,6 +36,9 @@ coverage/
 *.swp
 *.swo
 
+# Accidental nested repository checkout
+/logscan/
+
 # OS files
 .DS_Store
 Thumbs.db
