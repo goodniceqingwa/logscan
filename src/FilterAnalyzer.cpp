@@ -20,17 +20,45 @@ bool FilterAnalyzer::analyze(
     BatchReport& output,
     std::string& error)
 {
-    (void)input;
-    (void)output;
+    error.clear();
 
-    error = "not implemented";
-    return false;
+    BatchReport report;
+    report.batch_id = input.id;
+    report.worker_id = input.worker_id;
+    report.records_analyzed = input.records.size();
+
+    report.findings.reserve(input.records.size());
+
+    for (const auto& record : input.records)
+    {
+        if (!matches(record))
+        {
+            continue;
+        }
+
+        Finding finding;
+        finding.record_id = record.id;
+        finding.position = record.position;
+        finding.severity = record.severity;
+        finding.rule_id = "filter.match";
+        finding.message = record.message;
+
+        report.findings.push_back(std::move(finding));
+    }
+
+    output = std::move(report);
+
+    return true;
 }
 
 bool FilterAnalyzer::matches(const LogRecord& record) const
 {
-    (void)record;
-    return false;
+    if (!criteria_.severity.has_value())
+    {
+        return true;
+    }
+
+    return record.severity == *criteria_.severity;
 }
 
 }  // namespace logscan
