@@ -4,6 +4,8 @@
 #include "logscan/LogAnalyzer.h"
 
 #include <optional>
+#include <memory>
+#include <string>
 
 namespace logscan {
 
