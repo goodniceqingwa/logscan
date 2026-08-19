@@ -17,7 +17,6 @@ add_test(
     COMMAND logscan_api_test
 )
 
-
 add_executable(file_log_source_test
     file_log_source_test.cpp
 )
@@ -75,4 +74,23 @@ target_compile_features(filter_analyzer_test
 add_test(
     NAME filter_analyzer_test
     COMMAND filter_analyzer_test
+)
+
+add_executable(console_report_sink_test
+    console_report_sink_test.cpp
+)
+
+target_link_libraries(console_report_sink_test
+    PRIVATE
+        logscan
+)
+
+target_compile_features(console_report_sink_test
+    PRIVATE
+        cxx_std_17
+)
+
+add_test(
+    NAME console_report_sink_test
+    COMMAND console_report_sink_test
 )
