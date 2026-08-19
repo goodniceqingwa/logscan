@@ -6,13 +6,15 @@ option(LOGSCAN_BUILD_TESTS "Build logscan tests" ON)
 option(LOGSCAN_BUILD_BENCHMARKS "Build benchmark entry points" ON)
 option(LOGSCAN_BUILD_TOOLS "Build developer tools" ON)
 
-# 核心静态库。当前源文件只包含实现占位，不提供日志业务逻辑。
+# 核心静态库。
 add_library(logscan STATIC
     src/LogScanner.cpp
     src/ParallelExecutor.cpp
     include/logscan/LogAnalyzer.h
+    include/logscan/FilterAnalyzer.h
     include/logscan/LogParser.h
     include/logscan/LogReportSink.h
+    include/logscan/ConsoleReportSink.h
     include/logscan/LogScanner.h
     include/logscan/LogScannerConfig.h
     include/logscan/LogSource.h
@@ -21,8 +23,8 @@ add_library(logscan STATIC
     src/FileLogSource.cpp
     include/logscan/FixedFormatLogParser.h
     src/FixedFormatLogParser.cpp
-    include/logscan/FilterAnalyzer.h
     src/FilterAnalyzer.cpp
+    src/ConsoleReportSink.cpp
 )
 
 target_compile_features(logscan PUBLIC cxx_std_17)
