@@ -55,7 +55,7 @@ int test_exact_severity_filter()
         return 2;
     }
 
-    return 0;// 验证批次信息被正确传递。
+    // 验证批次信息被正确传递。
     if (output.batch_id != 42 ||
         output.worker_id != 3 ||
         output.records_analyzed != 2) {
