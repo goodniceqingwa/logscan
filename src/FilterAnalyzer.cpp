@@ -53,12 +53,17 @@ bool FilterAnalyzer::analyze(
 
 bool FilterAnalyzer::matches(const LogRecord& record) const
 {
-    if (!criteria_.severity.has_value())
+    if (criteria_.severity.has_value() && record.severity != *criteria_.severity)
     {
-        return true;
+        return false;
     }
 
-    return record.severity == *criteria_.severity;
+    if (!criteria_.contains.empty() && record.message.find(criteria_.contains) == std::string::npos)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 }  // namespace logscan

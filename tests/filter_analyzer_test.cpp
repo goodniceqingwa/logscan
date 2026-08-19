@@ -92,9 +92,60 @@ int test_exact_severity_filter()
     return 0;
 }
 
+int test_contains_filter()
+{
+    logscan::LogBatch input;
+
+    input.records.push_back(make_record(200, logscan::Severity::Error, "database timeout"));
+    input.records.push_back(make_record(201, logscan::Severity::Error, "connection refused"));
+    input.records.push_back(make_record(202, logscan::Severity::Error, "Database Timeout"));
+
+    logscan::FilterCriteria criteria;
+    criteria.contains = "timeout";
+
+    logscan::FilterAnalyzer analyzer(std::move(criteria));
+
+    logscan::BatchReport output;
+    std::string error;
+
+    const bool succeeded = analyzer.analyze(input, output, error);
+
+    if (!succeeded)
+    {
+        std::cerr << "contains analysis failed:" << error << '\n';
+        return 10;
+    }
+
+    if (!error.empty())
+    {
+        std::cerr<<"expected an empty error message\n";
+        return 11;
+    }
+
+    if (output.findings.size() != 1)
+    {
+        std::cerr << "expected one finding, but got " << output.findings.size() << '\n';
+        return 12;
+    }
+
+    if (output.findings.front().record_id != 200) {
+        std::cerr << "the wrong record was selected\n";
+        return 13;
+    }
+
+    return 0;
+
+
+}
+
 }
 
 int main()
 {
-    return test_exact_severity_filter();
+    if (const int result = test_exact_severity_filter();
+        result != 0) {
+        return result;
+    }
+
+    return test_contains_filter();
 }
